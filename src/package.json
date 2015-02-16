@@ -1,0 +1,30 @@
+{
+  "name": "mpdparty.js",
+  "version": "0.4.0",
+  "description": "A Node.js Service for controlling your Music Player Daemon (MPD) library and let other People suggest Songs of your Playlist. Like Spotifys Party Mode but for your own Music Collection controlled by your MPD.",
+  "main": "mpd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/toha/mpdparty.js"
+  },
+  "keywords": [
+    "node",
+    "mpd",
+    "spotify",
+    "party",
+    "music"
+  ],
+  "author": "Tobias Hartwich",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mpd": "^1.3.0",
+    "node-uuid": "^1.4.7",
+    "redis": "^2.4.2",
+    "socket.io": "^1.4.5",
+    "underscore": "^1.8.3"
+  }
+}
