@@ -22,7 +22,25 @@ Player.prototype.loadPlayerInfo = function(statusmsg) {
     var currentsong = new Song();
     currentsong.fromPlaylistFile(msg);
 
+    // Time elapsed auslesen
+    app.mpd.sendCommand(cmd("status", []), function(err, msg) {
+      if (err) throw err;
+      try {
+        var timeelapsed = msg.split("time:")[1].split("\n")[0].split(":")[0].trim();
+      }
+      catch(Exception) {
+        var timeelapsed = 0;
+      }
+      console.log("timeelapsed")
+      console.log(timeelapsed)
 
+      currentsong.timeelapsed = timeelapsed;
+      currentsong.timeelpaseddate = new Date().getTime();
+      self.currentsong = currentsong;
+
+      app.socket.sockets.emit('playerupdate', currentsong);
+
+    });
 
 
 	});
