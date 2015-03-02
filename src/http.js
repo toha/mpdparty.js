@@ -46,3 +46,50 @@ function HTTPServer() {
 
   this.socketio.on('connection', function (socket) {
   });
+
+
+  self.http.post("/api/newuser", function(req, res) {
+    console.log("newuser: " + req.body.name);
+    if (req.body.name) {
+      app.redis.get("mpd:" + req.body.name, function (err, obj) {
+         if (obj === null) {
+           app.redis.set("mpd:" + req.body.name, {}, function (err, obj) {
+             res.send("ok");
+           });
+         }
+         else {
+           res.send("notok");
+         }
+      });
+    }
+    else {
+      res.send("notok");
+    }
+  });
+
+  self.http.get("/api/getplaylist", function(req, res) {
+    res.send({ songs: app.playlist.songs });
+  });
+
+  self.http.get("/api/getcurrentsong", function(req, res) {
+    res.send(app.player.currentsong);
+  });
+
+  self.http.get("/api/getwishlist", function(req, res) {
+    res.send({ songs: app.wishlist.globalWishlist });
+  });
+
+  self.http.get("/api/getphotowishlist", function(req, res) {
+    res.send({ photos: app.photowishlist.wishlist });
+  });
+
+  self.http.post("/api/search", function(req, res) {
+    app.search.search(req.body.query, function(result) {
+      console.log(result);
+
+      res.send(result);
+    });
+  });
+
+}
+module.exports = new HTTPServer();
