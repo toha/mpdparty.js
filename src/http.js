@@ -91,5 +91,22 @@ function HTTPServer() {
     });
   });
 
+
+  self.http.post("/api/addsongtowishlist", function(req, res) {
+    console.log(req.cookies);
+    app.wishlist.addItemToWishlist(req.body.item, req.cookies.uname);
+    res.send("ok");
+  });
+
+
+
+  self.http.post("/api/admin/acceptSong", function(req, res) {
+    var uname = req.cookies.uname;
+    var file = req.body.file;
+    var pos = req.body.pos;
+    app.wishlist.acceptRefuseSong(file, pos, true, "");
+    res.send("ok");
+  });
+
 }
 module.exports = new HTTPServer();
