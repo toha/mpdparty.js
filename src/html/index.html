@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta http-equiv="cleartype" content="on">
+
+
+    <title>Dodo &amp; Jule</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon"/>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/libs/jquery.js" type="text/javascript"></script>
+    <script src="js/libs/jquery.cookie.js" type="text/javascript"></script>
+    <script src="js/libs/fileuploader.js" type="text/javascript"></script>
+
+    <script src="js/libs/ICanHaz.min.js"></script>
+    <script src="js/libs/underscore.js"></script>
+    <script src="js/libs/backbone.js"></script>
+
+    <link href="js/libs/photoswipe/photoswipe.css" rel="stylesheet" type="text/css">
+    <script src="js/libs/photoswipe/lib/klass.min.js"></script>
+    <script src="js/libs/photoswipe/code.photoswipe-3.0.5.min.js"></script>
+
+    <link href="js/libs/fineuploader/fineuploader-3.4.1.css" rel="stylesheet" type="text/css">
+    <script src="js/libs/fineuploader/jquery.fineuploader-3.4.1.min.js"></script>
+
+    <script src="js/models/dummyModel.js"></script>
+
+    <script src="js/views/welcomeview.js"></script>
+    <script src="js/views/pageview.js"></script>
+    <script src="js/views/frontpageview.js"></script>
+    <script src="js/views/currentsongview.js"></script>
+    <script src="js/views/pagemenuview.js"></script>
+    <script src="js/views/playlistview.js"></script>
+    <script src="js/views/searchview.js"></script>
+    <script src="js/views/wishlistview.js"></script>
+    <script src="js/views/adminview.js"></script>
+    <script src="js/views/photoview.js"></script>
+
+    <script src="js/collections/playlistcollection.js"></script>
+
+    <script src="js/webapp.js"></script>
+
+    <script>
+      window.app = null;
+
+      $(document).ready(function () {
+
+        //Schonmal da oder nicht?
+        var username = $.cookie("uname");
+        if (!username) {
+          // Kein User
+          var welcomeview = new WelcomeView({});
+        }
+        else {
+          window.app = new Webapp();
+        }
+
+
+      });
+    </script>
+
+
+  </head>
+  <body>
+
+
+
+  </body>
+</html>
+
