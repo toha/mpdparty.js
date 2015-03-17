@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-		<meta http-equiv="cleartype" content="on">
+    <meta http-equiv="cleartype" content="on">
 
 
     <title>Dodo &amp; Jule</title>
@@ -68,7 +68,186 @@
   </head>
   <body>
 
+    <script id="pageTmpl" type="text/html" charset="utf-8">
+      <div id="page">
+        <div id="homeBtn"><img src="/img/home.png" /></div>
+        <header>Es wird gepoltert!</header>
+        <div id="content"></div>
+        <footer> </footer>
+      </div>
+    </script>
 
+    <script id="pageMenuTmpl" type="text/html" charset="utf-8">
+      <div id="pageMenu">
+        <div class="pageMenuItem" id="menuPlaylist">Playlist</div>
+        <div class="pageMenuItem" id="menuWhishlist">Wunschliste</div>
+        <div class="pageMenuItem" id="menuSearchSong">Lied Suchen</div>
+        <div class="pageMenuItem" id="menuPhoto">Fotoalbum</div>
+        <div class="pageMenuItem" id="menuFileUpload"></div>
+        <!--<div class="pageMenuItem" id="menuUpload">Download</div>
+        <div class="pageMenuItem" id="menuUpload">Lied hochladen </div>-->
+      </div>
+    </script>
+
+    <script id="welcomeViewTmpl" type="text/html" charset="utf-8">
+     <div id="welcomeView">
+      <div id="welcomeViewContent">
+        <input type="text" id="welcomeViewUsername" placeholder="Dein Name" /><br /> <button id="welcomeViewBtn">Los gehts!</button>
+      </div>
+     </div>
+    </script>
+
+    <script id="currentSongTmpl" type="text/html" charset="utf-8">
+      <div id="currentSong">
+        <div id="currentSongArtist">{{ artist }}</div>
+        <div id="currentSongTitle">{{ title }}</div>
+
+        <!--<div id="currentSongOptions">
+          <button id="currentSongOptionsDl">Aktuellen Song runterladen</button>
+          <button id="currentSongOptionsStream">Live-Stream</button>
+        </div>-->
+      </div>
+    </script>
+
+    <script id="playlistTmpl" type="text/html" charset="utf-8">
+
+      <div id="playlist">
+        <h1>Playlist</h1>
+        {{#songs}}
+          <div class="playlistItem">
+            <div class="playlistItemPos">{{ pos }}</div>
+            <div class="playlistItemArtist">{{ artist }}</div>
+            <div class="playlistItemTitle">{{ title }}</div>
+          </div>
+        {{/songs}}
+      </div>
+    </script>
+
+    <script id="searchTmpl" type="text/html" charset="utf-8">
+      <div id="search">
+        <div id="searchInput"><input type="text" id="searchInputVal" placeholder="Lied Suchen" value="{{ currentQuery }}" /></div>
+        <div id="searchIntro">
+          {{^songs}}
+            <p id="searchHelp">So geht's: Titel oder Künstler eingeben, Enter drücken und Lied antippen um es zur Wunschliste hinzuzufügen. Der DJ entscheidet, ob das Lied spielbar ist.</p>
+
+            <h1>Beliebte</h1>
+            <div id="searchPopular">
+              <div class="searchPopularItem">Top 100 Single Charts</div>
+              <div class="searchPopularItem">Top 20 Black Charts</div>
+              <div class="searchPopularItem">Top 30 Party Schlager</div>
+              <div class="searchPopularItem">DJ Top 100 2013</div>
+                <div class="searchPopularItem">Dance Hits</div>
+              <div class="searchPopularItem">Fetenhits</div>
+              <div class="searchPopularItem">German Top 100 Jahrescharts</div>
+              <div class="searchPopularItem">GNT Catwalk Charts</div>
+            </div>
+          {{/songs}}
+        </div>
+      </div>
+    </script>
+
+    <script id="searchResultTmpl" type="text/html" charset="utf-8">
+      <div id="searchResult">
+        <div id="searchResultReset">reset</div>
+        {{#songs}}
+          <div class="searchResultItem">
+            <div class="searchResultItemPos"></div>
+            <div class="searchResultItemArtist">{{ artist }}<input type="hidden" class="searchResultItemFile" value="{{ filename }}" /></div>
+            <div class="searchResultItemTitle">{{ title }}</div>
+          </div>
+        {{/songs}}
+      </div>
+    </script>
+
+
+    <script id="wishlistTmpl" type="text/html" charset="utf-8">
+      <div id="wishlist">
+        <h1>Wunschliste</h1>
+        {{#songs}}
+          <div class="wishlistItem {{#fromMe}}playlistItemActive{{/fromMe}}  ">
+            <div class="wishlistItemArtist">{{ artist }}</div>
+            <div class="wishlistItemTitle">{{ title }}</div>
+            <div class="wishlistItemUser">gewünscht von <strong>{{ username }}</strong> vor {{ timeago }} Minuten</div>
+            {{#acceptTime}}
+              {{#accepted}}
+                <div class="wishlistItemMsg">✓ Wunsch erfüllt.</div>
+              {{/accepted}}
+              {{^accepted}}
+                <div class="wishlistItemMsg">✗ Abgelehnt. Grund: {{ reason }}</div>
+              {{/accepted}}
+            {{/acceptTime}}
+          </div>
+        {{/songs}}
+      </div>
+    </script>
+
+    <script id="adminTmpl" type="text/html" charset="utf-8">
+      <div id="admin">
+        <h1>Wunschliste verwalten</h1>
+        {{#songs}}
+          <div class="wishlistItem">
+            <div class="adminItemPos"><input type="hidden" class="adminWishItemFilename" value="{{ filename }}" /></div>
+            <div class="wishlistItemArtist">{{ artist }}</div>
+            <div class="wishlistItemTitle">{{ title }}</div>
+            <div class="wishlistItemUser">gewünscht von <strong>{{ username }}</strong></div>
+            <div class="adminlistOptions">
+              <button class="smallButton adminlistAcceptSong">Akzeptieren</button>
+              <button class="smallButton adminlistRefuseSong">Ablehnen</button>
+            </div>
+          </div>
+        {{/songs}}
+
+        <div id="photoadminwishlist">
+          <h1>Fotos verwalten</h1>
+          {{#photos}}
+            <div class="photoAdminItem">
+              <a href="/img/photo/big/{{ filename }}" target="_blank"><img src="/img/photo/thumb/{{ filename }}" /></a><br />
+              <input type="checkbox" class="photocheckbox" value="{{ filename }}" />
+            </div>
+          {{/photos}}
+          <div id="adminphotobuttons">
+
+            <button class="adminphotoRefuse">Verwerfen</button>
+            <button class="adminphotoaccept">Akzeptieren</button>
+            <button class="adminphotomarkall">Alle Markieren</button>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script id="adminAcceptSongPlaylistTmpl" type="text/html" charset="utf-8">
+      <div class="adminAcceptSongPlaylist">
+        <button class="smallButton adminlistAcceptSongInsertEnd">An das ende</button>
+
+         <select class="adminlistAcceptSongPlaylistSelect">
+          {{#songs}}
+            <option value="{{ pos }}">{{ pos }}. {{ artist }} - {{ title }}</option>
+          {{/songs}}
+        </select>
+        <button class="smallButton adminlistAcceptSongInsertAfter">Nach</button>
+      </div>
+    </script>
+
+    <script id="adminRefuseSongPlaylistTmpl" type="text/html" charset="utf-8">
+      <div class="adminRefuseSongPlaylist">
+        Grund: <input type="text" class="adminRefuseSongPlaylistReason" /><button class="smallButton adminlistRefuseSongSend">Absenden</button>
+      </div>
+    </script>
+
+    <script id="photosTmpl" type="text/html" charset="utf-8">
+      <div id="photos">
+        <h1>Fotos</h1>
+
+        <ul id="Gallery" class="gallery">
+          {{#photos}}
+            <li><a href="img/photo/big/{{ filename }}"><img src="img/photo/thumb/{{ filename }}" /></a></li>
+
+          {{/photos}}
+        </ul>
+
+
+      </div>
+    </script>
 
   </body>
 </html>
